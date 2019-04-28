@@ -27,10 +27,11 @@ def check_subject_is_separated_from_body(commit_message):
     return check_result
 
 
-def check_subject_is_not_too_long(commit_message):
+def check_subject_is_not_too_long(commit_message, subject_limit):
     lines = commit_message.splitlines()
-    check_result = len(lines[0]) <= 50
-    print_result(check_result, "Limit the subject line to 50 characters")
+    check_result = len(lines[0]) <= subject_limit
+    print_result(check_result, "Limit the subject line to " +
+                 str(subject_limit) + " characters")
 
     return check_result
 
@@ -69,22 +70,22 @@ def check_subject_uses_imperative(commit_message):
 
     _, third_person_result = third_person_blob.tags[1]
     _, non_third_person_result = non_third_person_blob.tags[1]
-
     check_result = non_third_person_result == "VBP" and third_person_result != "VBZ"
-
     print_result(check_result, "Use the imperative mood in the subject line")
+
     return check_result
 
 
-def check_body_lines_are_not_too_long(commit_message):
+def check_body_lines_are_not_too_long(commit_message, body_limit):
     lines = commit_message.splitlines()
     check_result = True
     for line in lines:
-        if len(line) > 72:
+        if len(line) > body_limit:
             check_result = False
             break
+    print_result(check_result, "Wrap the body at " +
+                 str(body_limit) + " characters")
 
-    print_result(check_result, "Wrap the body at 72 characters")
     return check_result
 
 
@@ -107,6 +108,12 @@ def main():
     parser.add_argument("--message",
                         help="The commit message to check",
                         required=True)
+    parser.add_argument("--subject-limit",
+                        help="The maximum allowed length for a commit subject",
+                        default=50)
+    parser.add_argument("--body-limit",
+                        help="The maximum allowed length for a line in the commit body",
+                        default=72)
     args = parser.parse_args()
 
     commit_message = args.message.strip()
@@ -115,12 +122,14 @@ def main():
           "Conformance to the 7 rules of a great Git commit message:" + CliColors.ENDC)
 
     all_rules_verified = check_subject_is_separated_from_body(commit_message)
-    all_rules_verified &= check_subject_is_not_too_long(commit_message)
+    all_rules_verified &= check_subject_is_not_too_long(
+        commit_message, int(args.subject_limit))
     all_rules_verified &= check_subject_is_capitalized(commit_message)
     all_rules_verified &= check_subject_does_not_end_with_period(
         commit_message)
     all_rules_verified &= check_subject_uses_imperative(commit_message)
-    all_rules_verified &= check_body_lines_are_not_too_long(commit_message)
+    all_rules_verified &= check_body_lines_are_not_too_long(
+        commit_message, int(args.body_limit))
     all_rules_verified &= check_body_explains_what_and_why(commit_message)
 
     sys.exit(0 if all_rules_verified else 1)
