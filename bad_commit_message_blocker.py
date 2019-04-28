@@ -54,6 +54,7 @@ def check_subject_does_not_end_with_period(commit_message):
 
 
 def check_subject_uses_imperative(commit_message):
+    first_line = commit_message.splitlines()[0]
     third_person_singular_present_verb = "VBZ"
     non_third_person_singular_present_verb = "VBP"
     # The default NLTK parser is not very good with imperative sentences
@@ -68,10 +69,10 @@ def check_subject_uses_imperative(commit_message):
         non_third_person_prefix.split())
     # Turn the first character into a lowercase so to make it easier for
     # the parser to determine whether the word is a verb and its tense
-    first_character_in_lowercase = commit_message[0].lower()
-    commit_message = first_character_in_lowercase + commit_message[1:]
-    third_person_blob = TextBlob(third_person_prefix + commit_message)
-    non_third_person_blob = TextBlob(non_third_person_prefix + commit_message)
+    first_character_in_lowercase = first_line[0].lower()
+    first_line = first_character_in_lowercase + first_line[1:]
+    third_person_blob = TextBlob(third_person_prefix + first_line)
+    non_third_person_blob = TextBlob(non_third_person_prefix + first_line)
 
     first_word, third_person_result = third_person_blob.tags[words_in_third_person_prefix_blob]
     _, non_third_person_result = non_third_person_blob.tags[words_in_non_third_person_prefix_blob]
@@ -84,8 +85,8 @@ def check_subject_uses_imperative(commit_message):
     # third person, when parsed in the third person blob.
     # So, we ultimately check if the verb ends with an 's' which is a pretty
     # good indicator of a third person, simple present tense verb.
-    check_result = non_third_person_result == non_third_person_singular_present_verb and (
-        third_person_result != third_person_singular_present_verb or not first_word.endswith("s"))
+    check_result = (non_third_person_result ==
+                    non_third_person_singular_present_verb) and (third_person_result != third_person_singular_present_verb or not first_word.endswith("s"))
     print_result(check_result, "Use the imperative mood in the subject line")
 
     return check_result
