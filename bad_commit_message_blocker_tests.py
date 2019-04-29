@@ -48,11 +48,12 @@ class TestCommitMessageBlocker(unittest.TestCase):
             self.assertFalse(blocker.check_subject_uses_imperative(
                 input), "\"" + input + "\" did not produce the expected result")
 
-    # def test_checkSubjectUsesImperative_WhenRandom_WillReturnFalse(self):
-    #     test_input = ["Documentation is updated"]
-    #     for input in test_input:
-    #         self.assertFalse(blocker.check_subject_uses_imperative(
-    #             input), "\"" + input + "\" did not produce the expected result")
+    def test_checkSubjectUsesImperative_WhenRandom_WillReturnFalse(self):
+        test_input = ["Documentation is updated",
+                      "Addition of new class"]
+        for input in test_input:
+            self.assertFalse(blocker.check_subject_uses_imperative(
+                input), "\"" + input + "\" did not produce the expected result")
 
 
 if __name__ == '__main__':

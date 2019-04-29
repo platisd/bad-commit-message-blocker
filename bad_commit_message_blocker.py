@@ -61,10 +61,12 @@ def check_subject_uses_imperative(commit_message):
     # so we prefix the commit message with a personal pronoun so to
     # help it determine easier whether the upcoming word is a verb
     # and not a noun.
-    # We will prefix in two different ways, so to avoid false results
+    # We will prefix in two different ways, so to avoid false results.
+    # Read more here: https://stackoverflow.com/a/30823202/6485320
+    # and here: https://stackoverflow.com/a/9572724/6485320
     third_person_prefix = "It "
     words_in_third_person_prefix_blob = len(third_person_prefix.split())
-    non_third_person_prefix = "They "
+    non_third_person_prefix = "You "
     words_in_non_third_person_prefix_blob = len(
         non_third_person_prefix.split())
     # Turn the first character into a lowercase so to make it easier for
@@ -85,8 +87,8 @@ def check_subject_uses_imperative(commit_message):
     # third person, when parsed in the third person blob.
     # So, we ultimately check if the verb ends with an 's' which is a pretty
     # good indicator of a third person, simple present tense verb.
-    check_result = (non_third_person_result ==
-                    non_third_person_singular_present_verb) and (third_person_result != third_person_singular_present_verb or not first_word.endswith("s"))
+    check_result = non_third_person_result == non_third_person_singular_present_verb and (
+        third_person_result != third_person_singular_present_verb or not first_word.endswith("s"))
     print_result(check_result, "Use the imperative mood in the subject line")
 
     return check_result
