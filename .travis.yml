@@ -1,0 +1,21 @@
+# A sample TravisCI configuration file that checks whether
+# the current commit message is good or not. Adjust accordingly.
+language: python
+
+python:
+  - "3.6"
+
+cache:
+  directories:
+    - $HOME/nltk_data
+
+install:
+  - pip3 install textblob
+  - python3 -m textblob.download_corpora
+
+script:
+  # Run the unit tests
+  - pytest bad_commit_message_blocker_tests.py
+  # Run the script passing the current commit message as argument
+  - echo "$TRAVIS_COMMIT_MESSAGE"
+  - python3 bad_commit_message_blocker.py --message "$TRAVIS_COMMIT_MESSAGE"
