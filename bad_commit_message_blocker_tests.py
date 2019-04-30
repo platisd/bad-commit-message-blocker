@@ -55,6 +55,66 @@ class TestCommitMessageBlocker(unittest.TestCase):
             self.assertFalse(blocker.check_subject_uses_imperative(
                 input), "\"" + input + "\" did not produce the expected result")
 
+    def test_checkSubjectSeparateFromBody_WhenLineBetweenBodyAndSubject_WillReturnTrue(self):
+        test_input = """Add this cool feature
+
+        This cool feature is implemented because X and Y."""
+        self.assertTrue(
+            blocker.check_subject_is_separated_from_body(test_input))
+
+    def test_checkSubjectSeparateFromBody_WhenNoLineBetweenBodyAndSubject_WillReturnFalse(self):
+        test_input = """Add this cool feature
+        This cool feature is implemented because X and Y."""
+        self.assertFalse(
+            blocker.check_subject_is_separated_from_body(test_input))
+
+    def test_checkSubjectNotTooLong_WhenSubjectTooLong_WillReturnFalse(self):
+        test_input = "This is a very very very, really long, humongous subject for a commit message"
+        self.assertFalse(blocker.check_subject_is_not_too_long(test_input, 60))
+
+    def test_checkSubjectTooLong_WhenSubjectNotTooLong_WillReturnTrue(self):
+        test_input = "Add this neat commit message"
+        self.assertTrue(blocker.check_subject_is_not_too_long(test_input, 60))
+
+    def test_checkSubjectIsCapitalized_WhenSubjectBeginsWithCapital_WillReturnTrue(self):
+        test_input = "Add this cool new feature"
+        self.assertTrue(blocker.check_subject_is_capitalized(test_input))
+
+    def test_checkSubjectIsCapitalized_WhenSubjectBeginsWithLower_WillReturnFalse(self):
+        test_input = "add this weird-looking commit message"
+        self.assertFalse(blocker.check_subject_is_capitalized(test_input))
+
+    def test_checkSubjectDoesNotEndWithPeriod_WhenSubjectEndsWithPeriod_WillReturnFalse(self):
+        test_input = "I am a strange person and do such things."
+        self.assertFalse(
+            blocker.check_subject_does_not_end_with_period(test_input))
+
+    def test_checkSubjectDoesNotEndWithPeriod_WhenSubjectEndsWithoutPeriod_WillReturnTrue(self):
+        test_input = "I am a strange person and don't end commit messages with a period"
+        self.assertTrue(
+            blocker.check_subject_does_not_end_with_period(test_input))
+
+    def test_checkBodyLinesAreNotTooLong_WhenLinesTooLong_WillReturnFalse(self):
+        test_input = """Add this cool new feature
+
+        But damn...
+        I feel like adding some pretty huge lines and forget to insert \\n's. This is just sad!"""
+        self.assertFalse(
+            blocker.check_body_lines_are_not_too_long(test_input, 72))
+
+    def test_checkBodyLinesAreNotTooLong_WhenLinesNotTooLong_WillReturnTrue(self):
+        test_input = """Add this cool new feature
+
+        And nicely explain why it was added."""
+        self.assertTrue(
+            blocker.check_body_lines_are_not_too_long(test_input, 72))
+
+    def test_checkBodyExplainsWhatAndWhy_WhenCalled_WillReturnTrue(self):
+        # We cannot currently check this, so we always return true
+        # along with a relevant printed out message
+        test_input = "Something that does not matter"
+        self.assertTrue(blocker.check_body_explains_what_and_why(test_input))
+
 
 if __name__ == '__main__':
     unittest.main()
