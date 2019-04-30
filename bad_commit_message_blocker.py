@@ -151,7 +151,11 @@ def main():
     args = parser.parse_args()
 
     commit_message = args.message.strip()
-
+    print(CliColors.HEADER + CliColors.BOLD +
+          "Your commit message: " + CliColors.ENDC)
+    print("===========================")
+    print(commit_message)
+    print("===========================")
     print(CliColors.HEADER + CliColors.BOLD +
           "Conformance to the 7 rules of a great Git commit message:" + CliColors.ENDC)
 
