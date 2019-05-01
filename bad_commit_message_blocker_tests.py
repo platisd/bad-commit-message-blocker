@@ -1,4 +1,11 @@
-# Python code to demonstrate working of unittest
+'''
+A set of unit tests for the Bad Commit Message Blocker.
+
+The most interesting (and prone to fail) part is the imperative mood rule.
+This is why most tests are focused a round it. If you want to introduce
+improvements/changes to the script, make sure that there are no regressions
+and your newly introduced change is also covered by unit tests.
+'''
 import unittest
 import bad_commit_message_blocker as blocker
 
