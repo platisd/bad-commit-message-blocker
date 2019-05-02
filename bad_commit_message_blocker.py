@@ -1,14 +1,15 @@
 '''
-The `bad commit message blocker `intends to inhibit commits with bad
+The `bad commit message blocker` intends to inhibit commits with bad
 messages from getting merged into a project.
 
 It tries to enforce the "seven rules of a great Git commit message"
 as described by Chris Beams here: https://chris.beams.io/posts/git-commit/.
 
 The most challenging rule to implement, is (#5) using imperative mood
-in the subject line. It works kinda OK, but does not have 100%
+in the subject line. It works mostly as intended, but does not have 100%
 accuracy, as it can generate false positive or false negative results
-primarily due to programming-related terminology.
+primarily due to programming-related terminology. This innaccuracy stems
+from limitations of the (default) NLP parser the NLTK library utilizes.
 
 The final rule (#7) about explaining what and why instead of how in the
 body of a commit message, very subjective and therefore is left up to
