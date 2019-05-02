@@ -5,6 +5,8 @@ language: python
 python:
   - "3.6"
 
+if: type != pull_request
+
 cache:
   directories:
     - $HOME/nltk_data
