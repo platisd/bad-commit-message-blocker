@@ -61,3 +61,9 @@ You need to have Python3 installed and follow the steps bellow:
   * `python3 -m textblob.download_corpora`
 * Run the script to verify a commit message
   * `python3 bad_commit_message_blocker.py --message "Add a really cool feature"`
+* To define your own maximum character limits, call the script with the
+appropriate arguments:
+  * `--subject-limit` (defaults to `50`) to set the subject line limit. E.g.:
+    * `python3 bad_commit_message_blocker.py --subject-limit 80 --message "Add a really cool feature"`
+  * `--body-limit` (defaults to `72`) to set the body line limit. E.g.:
+    *  `python3 bad_commit_message_blocker.py --body-limit 120 --message "Add a really cool feature"`
