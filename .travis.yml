@@ -21,4 +21,4 @@ script:
   # Run the unit tests (you probably don't need to run this in your CI)
   - pytest bad_commit_message_blocker_tests.py
   # Verify that all commit messages in current branch abide by the best practices
-  - bash multiple_commits.sh
+  - bash verify_commit_messages_in_branch.sh
