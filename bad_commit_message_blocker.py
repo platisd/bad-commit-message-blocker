@@ -19,6 +19,9 @@ import argparse
 import sys
 from textblob import TextBlob
 
+DEFAULT_SUBJECT_LIMIT = 50
+DEFAULT_BODY_LIMIT = 72
+
 
 class CliColors:
     HEADER = '\033[95m'
@@ -137,6 +140,22 @@ def print_result(check_passed, rule):
                  "PASSED" if check_passed else CliColors.FAIL + "FAILED") + CliColors.ENDC + "] " + rule)
 
 
+def check(commit_message, subject_limit=DEFAULT_SUBJECT_LIMIT, body_limit=DEFAULT_BODY_LIMIT):
+    all_rules_verified = check_subject_is_separated_from_body(
+        commit_message)
+    all_rules_verified &= check_subject_is_not_too_long(
+        commit_message, subject_limit)
+    all_rules_verified &= check_subject_is_capitalized(commit_message)
+    all_rules_verified &= check_subject_does_not_end_with_period(
+        commit_message)
+    all_rules_verified &= check_subject_uses_imperative(commit_message)
+    all_rules_verified &= check_body_lines_are_not_too_long(
+        commit_message, body_limit)
+    all_rules_verified &= check_body_explains_what_and_why(commit_message)
+
+    return all_rules_verified
+
+
 def main():
     parser_description = "Bad commit message blocker: Avoid bad commit messages in your repository"
     parser = argparse.ArgumentParser(description=parser_description)
@@ -145,10 +164,10 @@ def main():
                         required=True)
     parser.add_argument("--subject-limit",
                         help="The maximum allowed length for a commit subject",
-                        default=50)
+                        default=DEFAULT_SUBJECT_LIMIT)
     parser.add_argument("--body-limit",
                         help="The maximum allowed length for a line in the commit body",
-                        default=72)
+                        default=DEFAULT_BODY_LIMIT)
     args = parser.parse_args()
 
     commit_message = args.message.strip()
@@ -160,16 +179,8 @@ def main():
     print(CliColors.HEADER + CliColors.BOLD +
           "Conformance to the 7 rules of a great Git commit message:" + CliColors.ENDC)
 
-    all_rules_verified = check_subject_is_separated_from_body(commit_message)
-    all_rules_verified &= check_subject_is_not_too_long(
-        commit_message, int(args.subject_limit))
-    all_rules_verified &= check_subject_is_capitalized(commit_message)
-    all_rules_verified &= check_subject_does_not_end_with_period(
-        commit_message)
-    all_rules_verified &= check_subject_uses_imperative(commit_message)
-    all_rules_verified &= check_body_lines_are_not_too_long(
-        commit_message, int(args.body_limit))
-    all_rules_verified &= check_body_explains_what_and_why(commit_message)
+    all_rules_verified = check(commit_message, int(
+        args.subject_limit), int(args.body_limit))
 
     sys.exit(0 if all_rules_verified else 1)
 
