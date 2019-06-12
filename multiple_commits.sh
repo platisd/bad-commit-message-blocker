@@ -1,7 +1,7 @@
 #!/bin/bash
 set -eu
 
-commits_since_master=$(git rev-list HEAD ^master)
+commits_since_master=$(git rev-list HEAD ^origin/master)
 
 while read -r commit_hash; do
     commit_message="$(git log --format=%B -n 1 $commit_hash)"

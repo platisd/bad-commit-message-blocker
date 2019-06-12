@@ -14,9 +14,11 @@ cache:
 install:
   - pip3 install textblob
   - python3 -m textblob.download_corpora
+  - git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+  - git fetch --all
 
 script:
   # Run the unit tests (you probably don't need to run this in your CI)
   - pytest bad_commit_message_blocker_tests.py
-  # Run the script passing the current commit message as argument
-  - python3 bad_commit_message_blocker.py --message "$TRAVIS_COMMIT_MESSAGE"
+  # Verify that all commit messages in current branch abide by the best practices
+  - bash multiple_commits.sh
