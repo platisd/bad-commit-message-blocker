@@ -1,0 +1,24 @@
+name: 'Bad commit message blocker'
+description: 'Inhibit commits with bad messages from getting merged'
+inputs:
+  subject_limit:
+    description: 'The maximum allowed length for a commit subject'
+    required: true
+    default: 50
+  body_limit:
+    description: 'The maximum allowed length for a line in the commit body'
+    required: true
+    default: 72
+  remote_branch:
+    description: 'The name of the remote branch you are trying to merge with'
+    required: true
+    default: 'master'
+  github_token:
+    description: 'The GitHub token'
+    required: true
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'check'  
+  color: 'green'

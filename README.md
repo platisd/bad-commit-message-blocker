@@ -6,7 +6,7 @@ A simple script, doing some natural language processing, to inhibit
 
 ## What?
 A Python3 script, easy to integrate with various CI machinery
-(e.g. see [TravisCI example](https://github.com/platisd/bad-commit-message-blocker/blob/master/.travis.yml))
+(e.g. see [GitHub Actions example](#github-action))
 that is meant to keep bad commit messages out of a project. It verifies
 whether the [seven rules of a great Git commit message](https://chris.beams.io/posts/git-commit/)
 by Chris Beams, are being followed:
@@ -67,3 +67,30 @@ appropriate arguments:
     * `python3 bad_commit_message_blocker.py --subject-limit 80 --message "Add a really cool feature"`
   * `--body-limit` (defaults to `72`) to set the body line limit. E.g.:
     *  `python3 bad_commit_message_blocker.py --body-limit 120 --message "Add a really cool feature"`
+
+## GitHub Action
+
+Now you can use this script as part of your **GitHub Actions** CI pipeline.
+
+An example configuration can be seen below:
+
+```yaml
+name: Commit messages
+
+on: [pull_request]
+
+jobs:
+  check-commit-message:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Verify commit messages follow best practices in CI
+        uses: platisd/bad-commit-message-blocker@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          # Optionally set the subject character limit (default `50`)
+          subject_limit: 60
+          # Optionally set the body character limit (default `72`)
+          body_limit: 100
+          # Optionally set the remote branch name to merge (default `master`)
+          remote_branch: dev
+```
