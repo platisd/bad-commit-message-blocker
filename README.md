@@ -81,6 +81,7 @@ on: [pull_request]
 
 jobs:
   check-commit-message:
+    if: github.event.pull_request.user.type != 'Bot'  # a number of GitHub Apps that can send PRs don't have configurable commits
     runs-on: ubuntu-20.04
     steps:
       - name: Verify commit messages follow best practices in CI
