@@ -4,6 +4,8 @@ set -eu
 script_dir="$(dirname "$0")"
 cd $script_dir
 
+printenv
+
 maintainer=${GITHUB_REPOSITORY%/*}
 eval git clone "https://${maintainer}:${INPUT_GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" ${GITHUB_REPOSITORY}
 cd $GITHUB_REPOSITORY
