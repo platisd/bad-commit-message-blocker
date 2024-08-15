@@ -9,6 +9,10 @@ inputs:
     description: 'The maximum allowed length for a line in the commit body'
     required: true
     default: 72
+  conventional_commit:
+    description: 'Whether to allow conventional commits, e.g. "feat: add new feature"'
+    required: false
+    default: false
   remote_branch:
     description: 'The name of the remote branch you are trying to merge with'
     required: true

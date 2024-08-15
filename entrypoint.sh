@@ -20,5 +20,6 @@ while read -r commit_hash; do
     python3 $script_dir/bad_commit_message_blocker.py \
         --message "${commit_message}" \
         --subject-limit "${INPUT_SUBJECT_LIMIT}" \
-        --body-limit "${INPUT_BODY_LIMIT}"
+        --body-limit "${INPUT_BODY_LIMIT}" \
+        --conventional-commit "${INPUT_CONVENTIONAL_COMMIT}"
 done <<< "$commits_since_master"

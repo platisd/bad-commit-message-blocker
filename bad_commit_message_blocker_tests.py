@@ -144,6 +144,16 @@ class TestCommitMessageBlocker(unittest.TestCase):
         test_input = "Something that does not matter"
         self.assertTrue(blocker.check_body_explains_what_and_why(test_input))
 
+    def test_stripPrefix_WhenColonInMessage_WillReturnEverythingAfterColon(self):
+        test_input = "feat: add new feature"
+        expected_output = "add new feature"
+        self.assertEqual(blocker.strip_prefix(test_input), expected_output)
+
+    def test_stripPrefix_WhenNoColonInMessage_WillReturnWholeMessage(self):
+        test_input = "add new feature"
+        expected_output = "add new feature"
+        self.assertEqual(blocker.strip_prefix(test_input), expected_output)
+
 
 if __name__ == "__main__":
     unittest.main()
