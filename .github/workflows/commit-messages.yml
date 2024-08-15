@@ -1,0 +1,13 @@
+name: Commit messages
+
+on: [pull_request]
+
+jobs:
+  check-commit-message:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify commit messages follow best practices in CI
+        uses: ./
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
