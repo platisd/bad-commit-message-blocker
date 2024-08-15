@@ -94,4 +94,6 @@ jobs:
           body_limit: 100
           # Optionally set the remote branch name to merge (default `master`)
           remote_branch: dev
+          # Optionally allow "conventional commits" (default `false`)
+          allow_conventional_commits: true
 ```

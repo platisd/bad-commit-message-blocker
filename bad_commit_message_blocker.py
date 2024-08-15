@@ -97,12 +97,10 @@ def check_subject_uses_imperative(commit_message):
     third_person_blob = TextBlob(third_person_prefix + first_line)
     non_third_person_blob = TextBlob(non_third_person_prefix + first_line)
 
-    first_word, third_person_result = third_person_blob.tags[
-        words_in_third_person_prefix_blob
-    ]
-    _, non_third_person_result = non_third_person_blob.tags[
-        words_in_non_third_person_prefix_blob
-    ]
+    tags = third_person_blob.tags
+    first_word, third_person_result = tags[words_in_third_person_prefix_blob]
+    tags = non_third_person_blob.tags
+    _, non_third_person_result = tags[words_in_non_third_person_prefix_blob]
 
     # We need to determine whether the first word is a non-third person verb
     # when parsed in a non-third person blob. However, there were some
@@ -167,6 +165,12 @@ def check(
     return all_rules_verified
 
 
+def strip_prefix(commit_message):
+    if ":" in commit_message:
+        return commit_message[commit_message.index(":") + 1 :].strip()
+    return commit_message
+
+
 def main():
     parser_description = (
         "Bad commit message blocker: Avoid bad commit messages in your repository"
@@ -183,6 +187,13 @@ def main():
         help="The maximum allowed length for a line in the commit body",
         default=DEFAULT_BODY_LIMIT,
     )
+    parser.add_argument(
+        "--conventional-commit",
+        help="Whether the commit message follows the conventional commit format,"
+        " e.g. 'feat: add new feature'",
+        type=bool,
+        default=False,
+    )
     args = parser.parse_args()
 
     commit_message = args.message.strip()
@@ -196,6 +207,9 @@ def main():
         + "Conformance to the 7 rules of a great Git commit message:"
         + CliColors.ENDC
     )
+
+    if args.conventional_commit:
+        commit_message = strip_prefix(commit_message)
 
     all_rules_verified = check(
         commit_message, int(args.subject_limit), int(args.body_limit)

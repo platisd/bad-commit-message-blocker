@@ -1,0 +1,2 @@
+textblob==0.18.0.post0
+pytest==8.3.2
