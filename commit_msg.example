@@ -1,0 +1,8 @@
+#!/bin/sh
+#
+# An example hook script to prepare the commit log message.
+
+
+COMMIT_MSG_FILE=$1
+
+python3 bad-commit-message-blocker/bad_commit_message_blocker_file.py --file $1
